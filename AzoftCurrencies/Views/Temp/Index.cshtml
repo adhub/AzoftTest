@@ -13,11 +13,6 @@
         public string NameEn { get; set; }
         public string NameRu { get; set; }
     }
-
-    string Func(dynamic o)
-    {
-        return o.Str;
-    }
 }
 
 @*{
@@ -133,7 +128,7 @@
     var currencyLines = File.ReadAllLines(Server.MapPath("~/Currencies Info/Соответствие кодам ЦБ.csv"));
     using (var db = new AzoftCurrencies.DAL.CurrenciesContext())
     {
-        foreach (var currencyLine in currencyLines.Skip(1).Take(1))
+        foreach (var currencyLine in currencyLines)
         {
             //var currencies = db.Currencies;
             //<p>@currencies.Count()</p>
@@ -169,11 +164,3 @@
         </table>
     }
 }
-
-@{
-    using (var db = new AzoftCurrencies.DAL.CurrenciesContext())
-    {
-        var c = db.Currencies.Find(10);
-        <p>@(c == null)</p>
-    }
-    }
