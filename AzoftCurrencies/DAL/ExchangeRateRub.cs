@@ -18,7 +18,7 @@ namespace AzoftCurrencies.DAL
         public DateTime Date { get; set; }
 
         [Column(TypeName = "money")]
-        public decimal Rate { get; set; }
+        public decimal? Rate { get; set; }
 
         [JsonIgnore]
         public virtual Currency Currency { get; set; }
