@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "Валюты";
+}
+
+<div id="bodyContainer" ng-app="CurrenciesApp">
+    <section id="content">
+        <div class="container">
+            <div class="row">
+                <div ng-controller="CurrenciesCtrl" ng-init="init()">
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section scripts {
+    @Scripts.Render("~/Scripts/angular.js")
+    @Scripts.Render("~/Scripts/app/currencies-controller.js")
+}

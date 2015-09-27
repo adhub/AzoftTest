@@ -1,0 +1,179 @@
+﻿@using System.Xml.Linq
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@functions
+{
+    class Currency
+    {
+        public string CodeIso4217 { get; set; }
+        public string CodeCbr { get; set; }
+        public string NameEn { get; set; }
+        public string NameRu { get; set; }
+    }
+
+    string Func(dynamic o)
+    {
+        return o.Str;
+    }
+}
+
+@*{
+    //http://cbr.ru/scripts/Root.asp?PrtId=SXML
+
+    var cbrCurrenciesList = XDocument.Load("http://www.cbr.ru/scripts/XML_val.asp?d=0");
+    var cbrCurrencies = cbrCurrenciesList.Root.Elements("Item").Select(x =>
+        new { CodeCbr = x.Attribute("ID").Value, NameRu = x.Element("Name").Value }
+    );
+    /*<ol>
+        @foreach (var cbrCurrency in cbrCurrencies)
+        {
+            var codeCbr = cbrCurrency.Attribute("ID").Value;
+            var nameRu = cbrCurrency.Element("Name").Value;
+            <li>@codeCbr @nameRu</li>
+        }
+    </ol>*/
+
+    var rccLines = File.ReadAllLines(Server.MapPath("~/Currencies Info/ОКВ.csv"));
+    var rccCurrencies = rccLines.Select(x =>
+    {
+        var components = x.Split(';');
+        var codeIso4217 = components[1];
+        var nameRu = components[2];
+        return new { CodeIso4217 = codeIso4217, NameRu = nameRu };
+    }).ToArray();
+    var rccCurrenciesByNameRu = new Dictionary<string, dynamic>();
+    foreach (var rccCurrency in rccCurrencies)
+    {
+        rccCurrenciesByNameRu[rccCurrency.NameRu] = rccCurrency;
+    }
+    /*<ol>
+        @foreach (var rccCurrency in rccCurrencies)
+        {
+            <li>@rccCurrency.CodeIso4217 @rccCurrency.NameRu</li>
+        }
+    </ol>*/
+
+    var iso4217CurrenciesList = XDocument.Load(Server.MapPath("~/Currencies Info/ISO 4217.xml"));
+    var iso4217Currencies = iso4217CurrenciesList.Root
+        .Element("CcyTbl")
+        .Elements("CcyNtry")
+        .Where(x => x.Element("Ccy") != null)
+        .Select(x => new { CodeIso4217 = x.Element("Ccy").Value, NameEn = x.Element("CcyNm").Value });
+    var iso4217CurrenciesByCodeIso4217 = new Dictionary<string, dynamic>();
+    foreach (var iso4217Currency in iso4217Currencies)
+    {
+        iso4217CurrenciesByCodeIso4217[iso4217Currency.CodeIso4217] = iso4217Currency;
+    }
+    /*<ol>
+        @foreach (var iso4217Currency in iso4217Currencies)
+        {
+            var codeIso4217 = iso4217Currency.Element("Ccy").Value;
+            var nameEn = iso4217Currency.Element("CcyNm").Value;
+            <li>@codeIso4217 @nameEn</li>
+        }
+    </ol>*/
+
+    var currencies = cbrCurrencies.Select(cbrCurrency =>
+    {
+        dynamic rccCurrency;
+        /*string nameToFind = x.NameRu;
+        if (nameToFind == "Южноафриканский рэнд")
+        {
+            nameToFind = "Рэнд";
+        }*/
+        if (!rccCurrenciesByNameRu.TryGetValue(cbrCurrency.NameRu, out rccCurrency))
+        {
+            //валюта не найдена в ОКВ по простому совпадению
+            var shortestWord = cbrCurrency.NameRu.Split(' ').OrderBy(y => y.Length).First().ToUpper();
+            rccCurrency = rccCurrencies.FirstOrDefault(y => y.NameRu.ToUpper().Contains(shortestWord));
+            if (rccCurrency == null)
+            {
+                //return new Currency { CodeCbr = cbrCurrency.CodeCbr, CodeIso4217 = "не найден в ОКВ", NameRu = cbrCurrency.NameRu };
+                return null;
+            }
+        }
+        dynamic iso4217Currency;
+        if (!iso4217CurrenciesByCodeIso4217.TryGetValue(rccCurrency.CodeIso4217, out iso4217Currency))
+        {
+            //return new Currency { CodeCbr = cbrCurrency.CodeCbr, CodeIso4217 = "не найден в ISO 4217", NameEn = cbrCurrency.NameRu };
+            return null;
+        }
+        return new Currency
+        {
+            CodeCbr = cbrCurrency.CodeCbr,
+            CodeIso4217 = rccCurrency.CodeIso4217,
+            NameRu = cbrCurrency.NameRu,
+            NameEn = iso4217Currency.NameEn
+        };
+    }).Where(x => x != null);
+
+    <table>
+        <tr>
+            <th>Код ЦБ</th>
+            <th>Код ISO 4217</th>
+            <th>Название</th>
+            <th>Name</th>
+        </tr>
+        @foreach (var currency in currencies)
+        {
+            <tr>
+                <td>@currency.CodeCbr</td>
+                <td>@currency.CodeIso4217</td>
+                <td>@currency.NameEn</td>
+                <td>@currency.NameRu</td>
+            </tr>
+        }
+    </table>
+}*@
+
+@*{
+    var currencyLines = File.ReadAllLines(Server.MapPath("~/Currencies Info/Соответствие кодам ЦБ.csv"));
+    using (var db = new AzoftCurrencies.DAL.CurrenciesContext())
+    {
+        foreach (var currencyLine in currencyLines.Skip(1).Take(1))
+        {
+            //var currencies = db.Currencies;
+            //<p>@currencies.Count()</p>
+
+            var components = currencyLine.Split(';');
+            var currency = new AzoftCurrencies.DAL.Currency { CodeCbr = components[0], CodeIso4217 = components[1], NameEn = components[2], NameRu = components[3] };
+            db.Currencies.Add(currency);
+            db.SaveChanges();
+        }
+    }
+}*@
+
+@{
+    using (var db = new AzoftCurrencies.DAL.CurrenciesContext())
+    {
+        <h3>Валюты:</h3>
+        <table border="1">
+            <tr>
+                <th>Код ЦБ</th>
+                <th>Код ISO 4217</th>
+                <th>Название</th>
+                <th>Name</th>
+            </tr>
+            @foreach (var currency in db.Currencies)
+            {
+                <tr>
+                    <td>@currency.CodeCbr</td>
+                    <td>@currency.CodeIso4217</td>
+                    <td>@currency.NameEn</td>
+                    <td>@currency.NameRu</td>
+                </tr>
+            }
+        </table>
+    }
+}
+
+@{
+    using (var db = new AzoftCurrencies.DAL.CurrenciesContext())
+    {
+        var c = db.Currencies.Find(10);
+        <p>@(c == null)</p>
+    }
+    }
