@@ -6,6 +6,7 @@ namespace AzoftCurrencies.DAL
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
+    [Table("CurrenciesUsers")]
     public partial class CurrencyUser
     {
         [Key]
