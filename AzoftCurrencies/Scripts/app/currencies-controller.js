@@ -1,4 +1,4 @@
-﻿angular.module('CurrenciesApp', [])
+﻿angular.module('CurrenciesApp', ['ui.bootstrap'])
     .controller('CurrenciesCtrl', function ($scope, $http, $timeout, $filter) {
         window.sc = $scope;
 
@@ -82,8 +82,8 @@
             }).length == 0;
         };
 
-        $scope.suggestions = [ ];
+        $scope.suggestions = [];
+        $scope.from = $scope.till = new Date();
+        $scope.maxDate = new Date()
         getRegisteredCurrenciesInternal();
-
-
     });
