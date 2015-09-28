@@ -12,7 +12,7 @@ using System.Globalization;
 namespace AzoftCurrencies.Controllers
 {
     [Authorize]
-    public class CurrenciesApiController : ApiController
+    public class CurrenciesController : ApiController
     {
         private CurrenciesContext db = new CurrenciesContext();
 
@@ -29,10 +29,11 @@ namespace AzoftCurrencies.Controllers
         public IHttpActionResult GetRegisteredCurrencies()
         {
             var userId = Microsoft.AspNet.Identity.IdentityExtensions.GetUserId(User.Identity);
-            var userCurrencies = db.CurrenciesUsers.Where(x => x.UserId == userId);
+            var userCurrencies = db.CurrenciesUsers.Where(x => x.UserId == userId).Select(x => x.Currency);
             return Ok(userCurrencies);
         }
 
+        [HttpGet]
         public void RegisterCurrency(int currencyId)
         {
             var userId = Microsoft.AspNet.Identity.IdentityExtensions.GetUserId(User.Identity);
@@ -45,6 +46,7 @@ namespace AzoftCurrencies.Controllers
             }
         }
 
+        [HttpGet]
         public void UnregisterCurrency(int currencyId)
         {
             var userId = Microsoft.AspNet.Identity.IdentityExtensions.GetUserId(User.Identity);
@@ -82,7 +84,7 @@ namespace AzoftCurrencies.Controllers
             //rates содержит коллекцию курсов с возможными "дырками"
             if (rates.Count() <= (till - from).TotalDays)
             {
-                //в БД меньшее количчество записей о курсах валюты и, значит, есть "дырки"
+                //в БД меньшее количество записей о курсах валюты и, значит, есть "дырки"
                 //далее производится поиск начала первой "дырки" и конца последней
                 //запрос курсов в сервисе ЦБ будет производиться для такого интервала,
                 //чтобы не делать множество запросов, соответствующих потенциально многочисленным
@@ -153,7 +155,7 @@ namespace AzoftCurrencies.Controllers
             var currenciesByNemaRu = db.Currencies.Where(x => x.NameRu.Contains(query));
             var currenciesByNemaEn = db.Currencies.Where(x => x.NameEn.Contains(query));
             var suggestions = currenciesByCode.Union(currenciesByNemaRu).Union(currenciesByNemaEn);
-            return Ok();
+            return Ok(suggestions);
         }
     }
 }
