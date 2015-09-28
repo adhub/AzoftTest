@@ -6,7 +6,46 @@
     <section id="content">
         <div class="container">
             <div class="row">
-                <div ng-controller="CurrenciesCtrl" ng-init="init()">
+                <div ng-controller="CurrenciesCtrl">
+                    <p ng-show="working">Работаю...</p>
+                    <p ng-show="error">Ошибка: {{errorDescription}}</p>
+                    <div ng-show="registeredCurrencies.length">
+                        <h2>Выбранные валюты:</h2>
+                        <table>
+                            <tr>
+                                <th>Код</th>
+                                <th>Наименование</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            <tr ng-repeat="currency in registeredCurrencies | orderBy:'codeIso4217'">
+                                <td>{{currency.codeIso4217}}</td>
+                                <td>{{currency.nameRu}}</td>
+                                <td><button ng-click="showDynamics(currency)">Курсы</button></td>
+                                <td><button ng-click="deleteCurrency(currency)">Удалить</button></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div ng-hide="registeredCurrencies.length">
+                        <h2>Нет выбранных валют</h2>
+                    </div>
+
+                    <div>
+                        <h4>Выбор валют</h4>
+                        <p><label>Поиск: <input type="text" ng-model="query" ng-change="getSuggestions(query)" /></label></p>
+                        <table ng-show="suggestions.length">
+                            <tr>
+                                <th>Код</th>
+                                <th>Наименование</th>
+                                <th></th>
+                            </tr>
+                            <tr ng-repeat="currency in suggestions | filter: withoutRegistered | orderBy:'codeIso4217' | limitTo: 5">
+                                <td>{{currency.codeIso4217}}</td>
+                                <td>{{currency.nameRu}}</td>
+                                <td><button ng-click="addCurrency(currency)">Добавить</button></td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
