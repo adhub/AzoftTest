@@ -25,3 +25,5 @@ textarea {
 
 /*==========================*/
 
+/* UI Bootstrap remedy */
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
