@@ -37,7 +37,7 @@ namespace AzoftCurrencies.DAL
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<ExchangeRateRub>()
-                .Property(e => e.Rate)
+                .Property(e => e.Value)
                 .HasPrecision(19, 4);
         }
     }
