@@ -27,3 +27,28 @@ textarea {
 
 /* UI Bootstrap remedy */
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+
+/*==========================*/
+
+.registered tr.checked {
+    background: blue;
+}
+
+.rates .glyphicon {
+    display: none;
+}
+
+.rates .sink {
+    color: red;
+}
+
+    .rates .sink .glyphicon-arrow-down {
+        display: inline;
+    }
+
+.rates .rise {
+    color: green;
+}
+    .rates .rise .glyphicon-arrow-up {
+        display: inline;
+    }
