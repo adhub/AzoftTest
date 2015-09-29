@@ -33,7 +33,60 @@
             });
         }
 
-        var suggestionsDelay = 3000;
+        function getRatesInternal() {
+            if (!$scope.selectedCurrency) return;
+            $scope.working = true;
+            var fromYear = $scope.from.getFullYear();
+            var fromMonth = $scope.from.getMonth() + 1;
+            var fromDay = $scope.from.getDate();
+            var tillYear = $scope.till.getFullYear();
+            var tillMonth = $scope.till.getMonth() + 1;
+            var tillDay = $scope.till.getDate();
+            return $http({
+                method: 'GET',
+                url: '/api/Currencies/GetRates',
+                params: {
+                    currencyId: $scope.selectedCurrency.id,
+                    fromYear: fromYear, fromMonth: fromMonth, fromDay: fromDay,
+                    tillYear: tillYear, tillMonth: tillMonth, tillDay: tillDay
+                }
+            }).then(function successCallback(response) {
+                var rates = response.data; //курсы, отсортированные на сервере по дате
+                var prevValue = 0;
+                angular.forEach(rates, function (rate, i) {
+                    if (rate.value === null) {
+                        rate.value = prevValue;
+                    }
+                    rate.valueFmt = rate.value.toFixed(4).replace(".", ",");
+                    if (i == 0) {
+                        rate.diff = "-";
+                    }
+                    else {
+                        var diff = rate.value - prevValue;
+                        if (diff < 0) {
+                            rate.diff = "" + diff.toFixed(4).replace(".", ",");
+                            rate.dir = "sink";
+                        }
+                        else if (diff > 0) {
+                            rate.diff = "+" + diff.toFixed(4).replace(".", ",");
+                            rate.dir = "rise";
+                        }
+                        else {
+                            rate.diff = "0";
+                        }
+                    }
+                    prevValue = rate.value;
+                });
+                $scope.selectedCurrency.rates = rates;
+            }, function errorCallback(response) {
+                $scope.errorDescription = response.data;
+                $scope.error = true;
+            }).finally(function () {
+                $scope.working = false;
+            });
+        }
+
+        var suggestionsDelay = 1000;
         var suggestionsTimer;
         $scope.getSuggestions = function (query) {
             if (suggestionsTimer) $timeout.cancel(suggestionsTimer);
@@ -46,7 +99,7 @@
             }, suggestionsDelay);
         };
 
-        $scope.addCurrency = function (currency) {
+        $scope.register = function (currency) {
             $scope.working = true;
             return $http({
                 method: 'GET',
@@ -54,6 +107,7 @@
                 params: { currencyId: currency.id }
             }).then(function successCallback(response) {
                 getRegisteredCurrenciesInternal();
+                $scope.selectedCurrency = null;
             }, function errorCallback(response) {
                 $scope.errorDescription = response.data;
                 $scope.error = true;
@@ -61,7 +115,7 @@
             });
         };
 
-        $scope.deleteCurrency = function (currency) {
+        $scope.unregister = function (currency) {
             $scope.working = true;
             return $http({
                 method: 'GET',
@@ -69,6 +123,7 @@
                 params: { currencyId: currency.id }
             }).then(function successCallback(response) {
                 getRegisteredCurrenciesInternal();
+                $scope.selectedCurrency = null;
             }, function errorCallback(response) {
                 $scope.errorDescription = response.data;
                 $scope.error = true;
@@ -82,8 +137,23 @@
             }).length == 0;
         };
 
-        $scope.suggestions = [];
+        $scope.refresh = function () {
+            getRatesInternal();
+        };
+
+        $scope.toggle = function (currency) {
+            if (currency == $scope.selectedCurrency) {
+                $scope.selectedCurrency = null;
+            }
+            else {
+                $scope.selectedCurrency = currency;
+            }
+        };
+
+        //$scope.registeredCurrencies = [ ];
+        //$scope.suggestions = [ ];
         $scope.from = $scope.till = new Date();
-        $scope.maxDate = new Date()
+        $scope.maxDate = new Date();
+
         getRegisteredCurrenciesInternal();
     });

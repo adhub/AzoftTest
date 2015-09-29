@@ -7,6 +7,7 @@ using System.Web.Http;
 using AzoftCurrencies.DAL;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using System.Xml.XPath;
 using System.Globalization;
 
 namespace AzoftCurrencies.Controllers
@@ -103,7 +104,7 @@ namespace AzoftCurrencies.Controllers
                 }
                 if (isThereHole)
                 {
-                    for (var d = till; d <= from; d = d.AddDays(-1))
+                    for (var d = till; d >= from; d = d.AddDays(-1))
                     {
                         if (!rateDates.Contains(d))
                         {
@@ -123,22 +124,31 @@ namespace AzoftCurrencies.Controllers
                     var ratesAdded = new List<ExchangeRateRub>();
                     lock (rateLock)
                     {
-                        foreach (var holeRate in holeRatesInfo.Root.Elements("Record"))
+                        var xpathTpl = "/ValCurs/Record[@Date='{0}']/Value/text()";
+                        for (var date = holeStart; date <= holeEnd; date = date.AddDays(1))
                         {
-                            var date = DateTime.ParseExact(holeRate.Attribute("Date").Value, "dd.MM.yyyy", invariantCulture);
-                            var value = Decimal.Parse(holeRate.Element("Value").Value.Replace(',', '.'), invariantCulture);
                             var existingRate = db.ExchangeRatesRub.FirstOrDefault(x => x.CurrencyId == currencyId && x.Date == date);
-                            if (existingRate == null)
+                            if (existingRate != null) continue;
+                            var xpath = String.Format(xpathTpl, date.ToString("dd.MM.yyyy", invariantCulture));
+                            var valueTextElement = (holeRatesInfo.XPathEvaluate(xpath) as IEnumerable<object>).FirstOrDefault();
+                            decimal? value;
+                            if (valueTextElement == null)
                             {
-                                var rate = new ExchangeRateRub
-                                {
-                                    CurrencyId = currencyId,
-                                    Date = date,
-                                    Rate = value
-                                };
-                                db.ExchangeRatesRub.Add(rate);
-                                ratesAdded.Add(rate);
+                                value = null;
                             }
+                            else
+                            {
+                                var valueText = (valueTextElement as XText).Value;
+                                value = Decimal.Parse(valueText.Replace(',', '.'), invariantCulture);
+                            }
+                            var rate = new ExchangeRateRub
+                            {
+                                CurrencyId = currencyId,
+                                Date = date,
+                                Value = value
+                            };
+                            db.ExchangeRatesRub.Add(rate);
+                            ratesAdded.Add(rate);
                         }
                         db.SaveChanges();
                     }
