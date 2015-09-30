@@ -10,8 +10,8 @@
             }).then(function successCallback(response) {
                 $scope.registeredCurrencies = response.data;
             }, function errorCallback(response) {
-                $scope.errorDescription = response.data;
-                $scope.error = true;
+                //$scope.errorDescription = response.data;
+                turnError();
             }).finally(function () {
                 $scope.working = false;
             });
@@ -26,8 +26,8 @@
             }).then(function successCallback(response) {
                 $scope.suggestions = response.data;
             }, function errorCallback(response) {
-                $scope.errorDescription = response.data;
-                $scope.error = true;
+                //$scope.errorDescription = response.data;
+                turnError();
             }).finally(function () {
                 $scope.working = false;
             });
@@ -78,13 +78,25 @@
                     prevValue = rate.value;
                 });
                 $scope.selectedCurrency.rates = rates;
-            }, function errorCallback(response) {
-                $scope.errorDescription = response.data;
-                $scope.error = true;
+            }, function (response) {
+                //$scope.errorDescription = response.data;
+                turnError();
             }).finally(function () {
                 $scope.working = false;
             });
         }
+
+        var errorDelay = 3000;
+        var errorTimer;
+        function turnError() {
+            if (errorTimer) $timeout.cancel(errorTimer);
+            var $error = $(".flerror");
+            $error.css("opacity", 0.8);
+            errorTimer = $timeout(function () {
+                $error.css("opacity", 0);
+            }, errorDelay);
+        }
+        window.turnError = turnError;
 
         var suggestionsDelay = 1000;
         var suggestionsTimer;
@@ -108,9 +120,9 @@
             }).then(function successCallback(response) {
                 getRegisteredCurrenciesInternal();
                 $scope.selectedCurrency = null;
-            }, function errorCallback(response) {
-                $scope.errorDescription = response.data;
-                $scope.error = true;
+            }, function (response) {
+                //$scope.errorDescription = response.data;
+                turnError();
                 $scope.working = false;
             });
         };
@@ -124,9 +136,9 @@
             }).then(function successCallback(response) {
                 getRegisteredCurrenciesInternal();
                 $scope.selectedCurrency = null;
-            }, function errorCallback(response) {
-                $scope.errorDescription = response.data;
-                $scope.error = true;
+            }, function (response) {
+                //$scope.errorDescription = response.data;
+                turnError();
                 $scope.working = false;
             });
         };
