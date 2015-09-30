@@ -3,94 +3,85 @@
 }
 
 <div id="bodyContainer" ng-app="CurrenciesApp">
-    <section id="content">
-        <div class="container">
-            <div class="row">
-                <div ng-controller="CurrenciesCtrl">
-                    <p ng-show="working">Работаю...</p>
-                    <p ng-show="error">Ошибка: {{errorDescription}}</p>
+    <section id="content" ng-controller="CurrenciesCtrl">
 
-                    <div class="selection">
-                        <h2>Выбор валют</h2>
-                        <p><label>Поиск: <input type="text" ng-model="query" ng-change="getSuggestions(query)" /></label></p>
-                        <table ng-show="(suggestions | filter: withoutRegistered).length">
-                            <tr>
-                                <th>Код</th>
-                                <th>Наименование</th>
-                                <th></th>
-                            </tr>
-                            <tr ng-repeat="currency in suggestions | filter: withoutRegistered | orderBy:'codeIso4217' | limitTo: 5">
-                                <td>{{currency.codeIso4217}}</td>
-                                <td>{{currency.nameRu}} ({{currency.nameEn}})</td>
-                                <td><button ng-click="register(currency)">Добавить</button></td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="registered" ng-show="registeredCurrencies.length">
-                        <h2>Выбранные валюты:</h2>
-                        <table>
-                            <tr>
-                                <th>Код</th>
-                                <th>Наименование</th>
-                                <th></th>
-                            </tr>
-                            <tr ng-repeat="currency in registeredCurrencies | orderBy:'codeIso4217'"
-                                ng-class="{checked: currency == selectedCurrency}"
-                                ng-click="toggle(currency)">
-                                <td>{{currency.codeIso4217}}</td>
-                                <td>{{currency.nameRu}}</td>
-                                <td><button ng-click="unregister(currency)">Удалить</button></td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div ng-hide="registeredCurrencies.length">
-                        <h2>Нет выбранных валют</h2>
-                    </div>
-                    <div class="dynamics" ng-show="selectedCurrency">
-                        <div>
-                            <p>{{from | date: "fullDate"}} – {{till | date: "fullDate"}}</p>
-                            <div style="display: inline-block;">
-                                <datepicker ng-model="from"
-                                            max-date="maxDate"
-                                            show-weeks="false"
-                                            class="well well-sm"
-                                            starting-day="1">
-                                </datepicker>
-                            </div>
-                            <div style="display: inline-block;">
-                                <datepicker ng-model="till"
-                                            max-date="maxDate"
-                                            show-weeks="false"
-                                            class="well well-sm"
-                                            starting-day="1">
-                                </datepicker>
-                            </div>
-                        </div>
-                        <div>
-                            <h2>
-                                Динамика курса {{selectedCurrency.codeIso4217}}
-                                {{from | date: "dd.MM.yyyy"}} – {{till | date: "dd.MM.yyyy"}}
-                                <button ng-hide="selectedCurrency.rates.length" ng-click="refresh()">Показать</button>
-                                <button ng-show="selectedCurrency.rates.length" ng-click="refresh()">Обновить</button>
-                            </h2>
-                            <table ng-show="selectedCurrency.rates.length" class="rates">
-                                <tr>
-                                    <th>Дата</th>
-                                    <th>Курс</th>
-                                    <th>Изменение</th>
-                                </tr>
-                                <tr ng-repeat="rate in selectedCurrency.rates">
-                                    <th>{{rate.date | date: "dd.MM.yyyy"}}</th>
-                                    <th>{{rate.valueFmt}}</th>
-                                    <th ng-class="rate.dir">
-                                        {{rate.diff}}
-                                        <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
-                                        <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
-                                    </th>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
+        <div class="loader bg-warning" ng-show="working"><span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></div>
+        <div class="flerror bg-danger"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span></div>
+
+        <div class="selection">
+            <h2>Выбор валют <small>Начните вводить текст</small></h2>
+            <div class="form-group">
+                <input type="text" class="form-control" ng-model="query" ng-change="getSuggestions(query)">
+            </div>
+            <ul class="list-group" ng-show="(suggestions | filter: withoutRegistered).length">
+                <li class="list-group-item"
+                    ng-repeat="currency in suggestions | filter: withoutRegistered | orderBy:'codeIso4217' | limitTo: 5">
+                    {{currency.codeIso4217}}
+                    {{currency.nameRu}}
+                    ({{currency.nameEn}})
+                    <button class="btn btn-default" title="Закрепить" ng-click="register(currency)"><span class="glyphicon glyphicon-plus text-primary" aria-hidden="true"></span></button>
+                </li>
+            </ul>
+        </div>
+        <div class="registered" ng-show="registeredCurrencies.length">
+            <h2>Закрепленные валюты:</h2>
+            <ul class="list-group">
+                <li class="list-group-item"
+                    ng-repeat="currency in registeredCurrencies | orderBy:'codeIso4217'">
+                    {{currency.codeIso4217}}
+                    {{currency.nameRu}}
+                    <button class="btn btn-default" ng-class="{active: currency == selectedCurrency}" title="{{currency == selectedCurrency ? 'Выклюючиь' : 'Включить'}}" ng-click="toggle(currency)"><span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span></button>
+                    <button class="btn btn-default" title="Открепить" ng-click="unregister(currency)"><span class="glyphicon glyphicon-remove text-danger" aria-hidden="true"></span></button>
+                </li>
+            </ul>
+        </div>
+        <div ng-hide="registeredCurrencies.length">
+            <h2>Нет закрепленных валют</h2>
+        </div>
+        <div class="dynamics" ng-show="selectedCurrency">
+            <div>
+                <h3>{{from | date: "fullDate"}} – {{till | date: "fullDate"}}</h3>
+                <div class="datepicker">
+                    <datepicker ng-model="from"
+                                max-date="maxDate"
+                                show-weeks="false"
+                                class="well well-sm"
+                                starting-day="1">
+                    </datepicker>
+                </div>
+                <div class="datepicker">
+                    <datepicker ng-model="till"
+                                max-date="maxDate"
+                                show-weeks="false"
+                                class="well well-sm"
+                                starting-day="1">
+                    </datepicker>
+                </div>
+            </div>
+            <div>
+                <h2>
+                    Динамика курса {{selectedCurrency.codeIso4217}}
+                    {{from | date: "dd.MM.yyyy"}} – {{till | date: "dd.MM.yyyy"}}
+                    <button class="btn btn-default" title="Показать" ng-hide="selectedCurrency.rates.length" ng-click="refresh()"><span class="glyphicon glyphicon-ok-circle text-info" aria-hidden="true"></span></button>
+                    <button class="btn btn-default" title="Обновить" ng-show="selectedCurrency.rates.length" ng-click="refresh()"><span class="glyphicon glyphicon-refresh text-info" aria-hidden="true"></span></button>
+                </h2>
+                <div class="well">
+                    <table ng-show="selectedCurrency.rates.length" class="rates">
+                        <tr>
+                            <th>Дата</th>
+                            <th>Курс</th>
+                            <th>Изменение</th>
+                        </tr>
+                        <tr ng-repeat="rate in selectedCurrency.rates">
+                            <td>{{rate.date | date: "dd.MM.yyyy"}}</td>
+                            <td>{{rate.valueFmt}}</td>
+                            <td ng-class="rate.dir">
+                                {{rate.diff}}
+                                <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+                                <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>

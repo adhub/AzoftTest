@@ -20,7 +20,7 @@
 input,
 select,
 textarea {
-    max-width: 280px;
+    /*max-width: 280px;*/
 }
 
 /*==========================*/
@@ -30,8 +30,21 @@ textarea {
 
 /*==========================*/
 
-.registered tr.checked {
-    background: blue;
+.datepicker {
+    display: inline-block;
+}
+
+    .datepicker .text-info, .datepicker .text-info:hover {
+        color: black;
+    }
+
+.rates {
+    width: 100%;
+    font-size: 1.2em;
+}
+
+.rates th, .rates td {
+    text-align: center;
 }
 
 .rates .glyphicon {
@@ -39,7 +52,7 @@ textarea {
 }
 
 .rates .sink {
-    color: red;
+    color: #ff7777;
 }
 
     .rates .sink .glyphicon-arrow-down {
@@ -47,8 +60,96 @@ textarea {
     }
 
 .rates .rise {
-    color: green;
+    color: #5fff5f;
 }
     .rates .rise .glyphicon-arrow-up {
         display: inline;
     }
+
+.loader {
+    position: fixed;
+    z-index: 1000;
+    bottom: 10px;
+    right: 10px;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    line-height: 55px;
+    font-size: 30px;
+    border-radius: 10px;
+    -o-animation: flash 3s ease-in-out infinite;
+    -moz-animation: flash 3s ease-in-out infinite;
+    -webkit-animation: flash 3s ease-in-out infinite;
+    animation: flash 3s ease-in-out infinite;
+}
+
+    .loader span {
+        display: block;
+        width: 100%;
+        height: 100%;
+        padding: 7px;
+        -o-animation: rotate 1s linear infinite;
+        -moz-animation: rotate 1s linear infinite;
+        -webkit-animation: rotate 1s linear infinite;
+        animation: rotate 1s linear infinite;
+    }
+
+.flerror {
+    position: fixed;
+    z-index: 1000;
+    bottom: 10px;
+    right: 10px;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    line-height: 55px;
+    font-size: 30px;
+    border-radius: 10px;
+    opacity: 0;
+    transition: opacity ease-out 1s;
+}
+
+    .flerror span {
+        display: block;
+        width: 100%;
+        height: 100%;
+        padding: 7px;
+    }
+
+@-o-keyframes rotate {
+    0% { transform: rotate(0); }
+    100% { transform: rotate(360deg); }
+}
+@-moz-keyframes rotate {
+    0% { transform: rotate(0); }
+    100% { transform: rotate(360deg); }
+}
+@-webkit-keyframes rotate {
+    0% { transform: rotate(0); }
+    100% { transform: rotate(360deg); }
+}
+@keyframes rotate {
+    0% { transform: rotate(0); }
+    100% { transform: rotate(360deg); }
+}
+
+@-o-keyframes flash {
+    0% { opacity: 0.6; }
+    50% { opacity: 0.2; }
+    100% { opacity: 0.6; }
+}
+@-moz-keyframes flash {
+    0% { opacity: 0.6; }
+    50% { opacity: 0.2; }
+    100% { opacity: 0.6; }
+}
+@-webkit-keyframes flash {
+    0% { opacity: 0.6; }
+    50% { opacity: 0.2; }
+    100% { opacity: 0.6; }
+}
+@keyframes flash {
+    0% { opacity: 0.6; }
+    50% { opacity: 0.2; }
+    100% { opacity: 0.6; }
+}
