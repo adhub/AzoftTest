@@ -33,6 +33,35 @@
             });
         }
 
+        var chart;
+        function showChart(data) {
+            if (chart) {
+                chart.setDataSource(data);
+            }
+            else {
+                chart = new cfx.Chart();
+                chart.setGallery(cfx.Gallery.Lines);
+                chart.getData().setSeries(1);
+                var fields = chart.getDataSourceSettings().getFields();
+                var field1 = new cfx.FieldMap();
+                var field2 = new cfx.FieldMap();
+                field1.setName("date");
+                field1.setUsage(cfx.FieldUsage.XValue);
+                fields.add(field1);
+                field2.setName("value");
+                field2.setDisplayName("Курс");
+                field2.setUsage(cfx.FieldUsage.Value);
+                fields.add(field2);
+                chart.getLegendBox().setVisible(false);
+                chart.getAxisX().getLabelsFormat().setFormat(cfx.AxisFormat.Date);
+                chart.getAxisX().getLabelsFormat().setCustomFormat("dd.MM.yyyy");
+                chart.setDataSource(data);
+                var tooltips = chart.getToolTips();
+                tooltips.setTriggerMode(1);
+                chart.create('chart');
+            }
+        }
+
         function getRatesInternal() {
             if (!$scope.selectedCurrency) return;
             $scope.working = true;
@@ -76,8 +105,10 @@
                         }
                     }
                     prevValue = rate.value;
+                    rate.date = new Date(rate.date);
                 });
                 $scope.selectedCurrency.rates = rates;
+                showChart(rates);
             }, function (response) {
                 //$scope.errorDescription = response.data;
                 turnError();

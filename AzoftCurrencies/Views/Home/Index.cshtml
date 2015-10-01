@@ -39,6 +39,7 @@
             <h2>Нет закрепленных валют</h2>
         </div>
         <div class="dynamics" ng-show="selectedCurrency">
+        @*<div class="dynamics">*@
             <div>
                 <h3>{{from | date: "fullDate"}} – {{till | date: "fullDate"}}</h3>
                 <div class="datepicker">
@@ -65,6 +66,7 @@
                     <button class="btn btn-default" title="Показать" ng-hide="selectedCurrency.rates.length" ng-click="refresh()"><span class="glyphicon glyphicon-ok-circle text-info" aria-hidden="true"></span></button>
                     <button class="btn btn-default" title="Обновить" ng-show="selectedCurrency.rates.length" ng-click="refresh()"><span class="glyphicon glyphicon-refresh text-info" aria-hidden="true"></span></button>
                 </h2>
+                <div id="chart" style="width: 100%; height: 400px;"></div>
                 <div class="well">
                     <table ng-show="selectedCurrency.rates.length" class="rates">
                         <tr>
@@ -88,10 +90,17 @@
     </section>
 </div>
 
+@section styles {
+    @Styles.Render("~/Styles/Attributes/jchartfx.attributes.css")
+    @Styles.Render("~/Styles/Palettes/jchartfx.palette.css")
+}
+
 @section scripts {
     @Scripts.Render("~/Scripts/angular.js")
     @Scripts.Render("~/Scripts/angular-locale_ru-ru.js")
     @Scripts.Render("~/Scripts/angular-ui/ui-bootstrap.js")
     @Scripts.Render("~/Scripts/angular-ui/ui-bootstrap-tpls.js")
+    @Scripts.Render("~/Scripts/jchartfx.system.js")
+    @Scripts.Render("~/Scripts/jchartfx.coreVector.js")
     @Scripts.Render("~/Scripts/app/currencies-controller.js")
 }
