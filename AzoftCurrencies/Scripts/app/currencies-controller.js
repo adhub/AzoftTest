@@ -31,7 +31,7 @@
             }
         };
 
-        /** Загружает список прикрепленных валют пользователя. */
+        /** Загружает список закрепленных валют пользователя. */
         function getRegisteredCurrenciesInternal() {
             $scope.working = true;
             return $http({
@@ -154,7 +154,7 @@
         };
 
         /**
-         * Прикрепляет выбранную валюту.
+         * Закрепляет выбранную валюту.
          * @param currency
         */
         $scope.register = function (currency) {
@@ -194,7 +194,7 @@
         };
 
         /**
-         * Отфильтровывает из коллекции валют уже прикрепленные.
+         * Отфильтровывает из коллекции валют уже закрепленные.
          * @param value
         */
         $scope.withoutRegistered = function (value) {
@@ -224,5 +224,5 @@
         $scope.from = $scope.till = new Date();
         $scope.maxDate = new Date();
 
-        getRegisteredCurrenciesInternal(); //первоначальный запрос прикрепленных валют пользователя
+        getRegisteredCurrenciesInternal(); //первоначальный запрос закрепленных валют пользователя
     });
