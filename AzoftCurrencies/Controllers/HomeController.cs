@@ -6,9 +6,9 @@ using System.Web.Mvc;
 
 namespace AzoftCurrencies.Controllers
 {
-    [Authorize]
     public class HomeController : Controller
     {
+        [Authorize]
         public ActionResult Index()
         {
             return View();
