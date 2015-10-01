@@ -1,6 +1,34 @@
-﻿angular.module('CurrenciesApp', ['ui.bootstrap'])
+﻿angular.module('CurrenciesApp', ['ui.bootstrap', 'n3-line-chart'])
     .controller('CurrenciesCtrl', function ($scope, $http, $timeout, $filter) {
         window.sc = $scope;
+
+        var formatDate = d3.time.format("%d.%m.%Y");
+        $scope.chartOptions = {
+            axes: {
+                x: {
+                    key: "date",
+                    type: "date",
+                    ticksFormat: "%d.%m.%Y",
+                    innerTicks: true,
+                    zoomable: true
+                }
+            },
+            series: [
+              {
+                  y: "value",
+                  lineMode: "dashed",
+                  color: "#ff7777"
+              }
+            ],
+            lineMode: "cardinal" /*"monotone"*/,
+            drawLegend: false,
+            tooltip: {
+                mode: "scrubber",
+                formatter: function (x, y, series) {
+                    return formatDate(x) + " " + y + " RUB/" + $scope.selectedCurrency.codeIso4217;
+                }
+            }
+        };
 
         function getRegisteredCurrenciesInternal() {
             $scope.working = true;
@@ -76,6 +104,7 @@
                         }
                     }
                     prevValue = rate.value;
+                    rate.date = new Date(rate.date);
                 });
                 $scope.selectedCurrency.rates = rates;
             }, function (response) {

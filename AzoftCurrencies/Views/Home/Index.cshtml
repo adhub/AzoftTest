@@ -65,8 +65,11 @@
                     <button class="btn btn-default" title="Показать" ng-hide="selectedCurrency.rates.length" ng-click="refresh()"><span class="glyphicon glyphicon-ok-circle text-info" aria-hidden="true"></span></button>
                     <button class="btn btn-default" title="Обновить" ng-show="selectedCurrency.rates.length" ng-click="refresh()"><span class="glyphicon glyphicon-refresh text-info" aria-hidden="true"></span></button>
                 </h2>
+                <div class="ratesChart">
+                    <linechart data="selectedCurrency.rates" options="chartOptions" mode=""></linechart>
+                </div>
                 <div class="well">
-                    <table ng-show="selectedCurrency.rates.length" class="rates">
+                    <table class="rates">
                         <tr>
                             <th>Дата</th>
                             <th>Курс</th>
@@ -93,5 +96,14 @@
     @Scripts.Render("~/Scripts/angular-locale_ru-ru.js")
     @Scripts.Render("~/Scripts/angular-ui/ui-bootstrap.js")
     @Scripts.Render("~/Scripts/angular-ui/ui-bootstrap-tpls.js")
+    @*@Scripts.Render("~/Scripts/d3/d3.js")*@
+    @*
+    по загадочной причине Хром отказывается интерпретировать JS, который содержит некоторые
+    греческие буквы, когда файл сервится с локалхоста;
+    можно указать удаленный файл или локальный минифицированный
+    <script src="http://d3js.org/d3.v3.js"></script>
+    *@
+    @Scripts.Render("~/Scripts/d3/d3.min.js")
+    @Scripts.Render("~/Scripts/line-chart.min.js")
     @Scripts.Render("~/Scripts/app/currencies-controller.js")
 }
