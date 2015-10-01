@@ -1,11 +1,11 @@
 namespace AzoftCurrencies.DAL
 {
-    using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
+    /// <summary>
+    /// Сущность таблицы связи пользователя и валюты.
+    /// </summary>
     [Table("CurrenciesUsers")]
     public partial class CurrencyUser
     {

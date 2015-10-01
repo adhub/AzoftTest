@@ -1,8 +1,9 @@
 ﻿angular.module('CurrenciesApp', ['ui.bootstrap', 'n3-line-chart'])
     .controller('CurrenciesCtrl', function ($scope, $http, $timeout, $filter) {
-        window.sc = $scope;
+        //window.sc = $scope; //использовалось при отладке (удобно смотреть содержимое of $scope в консоли)
 
-        var formatDate = d3.time.format("%d.%m.%Y");
+        var formatDate = d3.time.format("%d.%m.%Y"); //создание форматтера для дат
+        //объект настроек чарта
         $scope.chartOptions = {
             axes: {
                 x: {
@@ -30,6 +31,7 @@
             }
         };
 
+        /** Загружает список прикрепленных валют пользователя. */
         function getRegisteredCurrenciesInternal() {
             $scope.working = true;
             return $http({
@@ -45,6 +47,10 @@
             });
         }
 
+        /**
+         * Загружает список предложений по валютам.
+         * @param {string} query - Подстрока поиска.
+        */
         function getSuggestionsInternal(query) {
             $scope.working = true;
             return $http({
@@ -61,6 +67,7 @@
             });
         }
 
+        /** Загружает динамику курса выбранной валюты. */
         function getRatesInternal() {
             if (!$scope.selectedCurrency) return;
             $scope.working = true;
@@ -115,8 +122,9 @@
             });
         }
 
-        var errorDelay = 3000;
-        var errorTimer;
+        var errorDelay = 3000; //время показа индикатора ошибки
+        var errorTimer; //объект-обещание таймера показа ошибки
+        /** Зажигает на время индикатор ошибки. */
         function turnError() {
             if (errorTimer) $timeout.cancel(errorTimer);
             var $error = $(".flerror");
@@ -127,8 +135,13 @@
         }
         window.turnError = turnError;
 
-        var suggestionsDelay = 1000;
-        var suggestionsTimer;
+        var suggestionsDelay = 1000; //тайм-аут запроса предложений по валютам
+        var suggestionsTimer; //объект-обещание таймера предложений
+        /**
+         * Загружает список предложений по валютам
+         * (функция срабатывает с задержкой).
+         * @param {string} query - Подстрока поиска.
+        */
         $scope.getSuggestions = function (query) {
             if (suggestionsTimer) $timeout.cancel(suggestionsTimer);
             if (!query) {
@@ -140,6 +153,10 @@
             }, suggestionsDelay);
         };
 
+        /**
+         * Прикрепляет выбранную валюту.
+         * @param currency
+        */
         $scope.register = function (currency) {
             $scope.working = true;
             return $http({
@@ -156,6 +173,10 @@
             });
         };
 
+        /**
+         * Открепляет выбранную валюту.
+         * @param currency
+        */
         $scope.unregister = function (currency) {
             $scope.working = true;
             return $http({
@@ -172,16 +193,25 @@
             });
         };
 
+        /**
+         * Отфильтровывает из коллекции валют уже прикрепленные.
+         * @param value
+        */
         $scope.withoutRegistered = function (value) {
             return $filter('filter')($scope.registeredCurrencies, function (_value) {
                 return _value.id == value.id;
             }).length == 0;
         };
 
+        /** Обновляет информацию о динамике курса выбранной валюты. */
         $scope.refresh = function () {
             getRatesInternal();
         };
 
+        /**
+         * Выбирает или снимает выбор с выбранной валюты.
+         * @param currency
+        */
         $scope.toggle = function (currency) {
             if (currency == $scope.selectedCurrency) {
                 $scope.selectedCurrency = null;
@@ -191,10 +221,8 @@
             }
         };
 
-        //$scope.registeredCurrencies = [ ];
-        //$scope.suggestions = [ ];
         $scope.from = $scope.till = new Date();
         $scope.maxDate = new Date();
 
-        getRegisteredCurrenciesInternal();
+        getRegisteredCurrenciesInternal(); //первоначальный запрос прикрепленных валют пользователя
     });

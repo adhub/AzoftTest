@@ -94,8 +94,8 @@
 @section scripts {
     @Scripts.Render("~/Scripts/angular.js")
     @Scripts.Render("~/Scripts/angular-locale_ru-ru.js")
-    @Scripts.Render("~/Scripts/angular-ui/ui-bootstrap.js")
-    @Scripts.Render("~/Scripts/angular-ui/ui-bootstrap-tpls.js")
+    @Scripts.Render("~/Scripts/angular-ui/ui-bootstrap.js")         @* для контрола *@
+    @Scripts.Render("~/Scripts/angular-ui/ui-bootstrap-tpls.js")    @* выбора дат *@
     @*@Scripts.Render("~/Scripts/d3/d3.js")*@
     @*
     по загадочной причине Хром отказывается интерпретировать JS, который содержит некоторые
@@ -103,7 +103,7 @@
     можно указать удаленный файл или локальный минифицированный
     <script src="http://d3js.org/d3.v3.js"></script>
     *@
-    @Scripts.Render("~/Scripts/d3/d3.min.js")
+    @Scripts.Render("~/Scripts/d3/d3.min.js") @* требуется для n3-charts *@
     @Scripts.Render("~/Scripts/line-chart.min.js")
     @Scripts.Render("~/Scripts/app/currencies-controller.js")
 }
