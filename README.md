@@ -11,7 +11,7 @@
 Entity Framework.
 
 Внешний вид страниц определется использованным CSS-фреймворком [Bootstrap](http://getbootstrap.com/). Для разнообразия на сайте
-установлена темная тема Superhero.
+установлена темная тема [Superhero](http://bootswatch.com/superhero/).
 
 Выбор интервала дат производится при помощи контрола [Datepicker](http://angular-ui.github.io/bootstrap/#/datepicker) из комплекта [UI Bootstrap](http://angular-ui.github.io/bootstrap/). К сожалению, он не позволяет организовать выбор интервала в одном календарном гриде,
 поэтому применены два пикера.
