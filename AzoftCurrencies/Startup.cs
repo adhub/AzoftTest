@@ -1,6 +1,8 @@
 ﻿using Microsoft.Owin;
 using Owin;
 
+
+
 [assembly: OwinStartupAttribute(typeof(AzoftCurrencies.Startup))]
 namespace AzoftCurrencies
 {
