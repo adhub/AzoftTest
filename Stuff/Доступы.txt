@@ -1,0 +1,13 @@
+БД:
+adhub
+qw#$1Qwi
+
+Server=tcp:adhub.database.windows.net,1433;Database=AzoftCurrencies;User ID=adhub@adhub;Password={your_password_here};Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
+
+
+Сайт:
+azoftcur\adhub
+mgY45&5r
+
+
+http://azoftcur.azurewebsites.net/

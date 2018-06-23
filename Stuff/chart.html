@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+   <script type="text/javascript" src="/Scripts/jchartfx.system.js"></script>
+
+   <script type="text/javascript" src="/Scripts/jchartfx.coreBasic.js"></script>  
+
+ <!-- Uncomment this section to add extended User Interaction capabilities, including the End-User Menu.
+
+         The UI features require a jChartFX Plus license for deployment.
+
+    <script type="text/javascript" src="jChartFX/jchartfx.userinterface.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="jchartfx.userinterface.css" />
+
+    -->
+
+    <link rel="stylesheet" type="text/css" href="Styles/Attributes/jchartfx.attributes.css" />
+
+    <link rel="stylesheet" type="text/css" href="Styles/Palettes/jchartfx.palette.css" />
+
+</head>
+
+<body onload="loadChart()">
+
+<div id="ChartDiv" style="width:600px;height:400px"></div>
+
+<script type="text/javascript" language="javascript">
+
+    var chart1;
+
+    function loadChart()
+
+      {        
+
+           chart1 = new cfx.Chart();
+
+   var items = [
+   { "Date": new Date(2015,1,2), "Value": 7, "UpperLimit": 8, "LowerLimit": 6, "Employee": "John Smith" },
+   { "Date": new Date(2015,1,3), "Value": 8, "UpperLimit": 9, "LowerLimit": 7, "Employee": "Mark Johnston" },
+   { "Date": new Date(2015,1,4), "Value": 9, "UpperLimit": 10, "LowerLimit": 7, "Employee": "Michael Johnson" },
+   { "Date": new Date(2015,1,5), "Value": 10, "UpperLimit": 11, "LowerLimit": 8, "Employee": "John Smith" },
+   { "Date": new Date(2015,1,6), "Value": 12, "UpperLimit": 13, "LowerLimit": 9, "Employee": "Robert Walkins" },
+   { "Date": new Date(2015,1,7), "Value": 13, "UpperLimit": 14, "LowerLimit": 10, "Employee": "Mark Johnston" },
+   { "Date": new Date(2015,1,8), "Value": 14, "UpperLimit": 15, "LowerLimit": 10, "Employee": "Mark Johnston" },
+   { "Date": new Date(2015,1,9), "Value": 14, "UpperLimit": 16, "LowerLimit": 11, "Employee": "Michael Johnson" },
+   { "Date": new Date(2015,1,10), "Value": 15, "UpperLimit": 17, "LowerLimit": 12, "Employee": "John Smith" },
+   { "Date": new Date(2015,1,11), "Value": 16, "UpperLimit": 18, "LowerLimit": 13, "Employee": "Robert Walkins" }
+];
+
+chart1.setGallery(cfx.Gallery.Lines);
+chart1.getData().setSeries(1);
+
+var fields = chart1.getDataSourceSettings().getFields();
+var field1 = new cfx.FieldMap();
+var field2 = new cfx.FieldMap();
+
+field1.setName("Date");
+field1.setUsage(cfx.FieldUsage.XValue);
+fields.add(field1);
+
+field2.setName("Value");
+field2.setUsage(cfx.FieldUsage.Value);
+fields.add(field2);
+chart1.getLegendBox().setVisible(false);
+
+chart1.getAxisX().getLabelsFormat().setFormat(cfx.AxisFormat.Date);
+chart1.getAxisX().getLabelsFormat().setCustomFormat("dd.MM.yyyy");
+chart1.setDataSource(items);
+
+
+
+            var divHolder = document.getElementById('ChartDiv');
+
+        chart1.create(divHolder);            
+
+      }
+
+</script>
+
+</body>
+
+</html>

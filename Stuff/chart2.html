@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="/Scripts/jquery-1.10.2.js"></script>
+
+    <script src="/Scripts/bootstrap.js"></script>
+<script src="/Scripts/respond.js"></script>
+
+    
+    <script src="/Scripts/angular.js"></script>
+
+    <script src="/Scripts/angular-locale_ru-ru.js"></script>
+
+    <script src="/Scripts/angular-ui/ui-bootstrap.js"></script>
+
+    <script src="/Scripts/angular-ui/ui-bootstrap-tpls.js"></script>
+
+    <script src="http://d3js.org/d3.v3.js"></script>
+    <script src="/Scripts/line-chart.js"></script>
+
+
+
+    <style>
+        .container {
+          width: 600px;
+          height: 300px;
+        }
+    </style>
+    <script>
+    angular.module('example', ['n3-line-chart'])
+.controller('ExampleCtrl', function($scope) {
+ // Due to CodePen's API, it's not possible to include functions in dynamic CodePen's such as this one, therefore some closures might be missing (the axes' formatting functions, for example) and need to be added manually. Thanks ! :-)
+  $scope.data = [{
+d: "2015-09-21T00:00:00",
+val: 0},
+{
+d: "2015-09-22T00:00:00",
+val: 30.2034},
+{
+d: "2015-09-23T00:00:00",
+val: 30.4602}];
+
+  $scope.options = {
+  axes: {
+    x: {
+      key: "d",
+      type: "date"
+    }
+  },
+  series: [
+    {
+      y: "val",
+      label: "Жопа",
+      color: "#d62728"
+    }
+  ]
+};
+$scope.data.forEach(function(row) {
+    row.d = new Date(row.d);
+  });
+  
+});
+    </script>
+</head>
+<body>
+<div class="container" ng-app="example" ng-controller="ExampleCtrl">
+  <linechart data="data" options="options" mode=""></linechart>
+</div>
+</body>
+</html>

@@ -1,6 +1,5 @@
 .vs
 packages
-AzoftCurrencies/App_Data
+#AzoftCurrencies/App_Data
 AzoftCurrencies/bin
 AzoftCurrencies/obj
-Stuff
