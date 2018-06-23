@@ -5,7 +5,7 @@ namespace AzoftCurrencies.DAL
     using Newtonsoft.Json;
 
     /// <summary>
-    /// Валюта.
+    /// пїЅпїЅпїЅпїЅпїЅпїЅ.
     /// </summary>
     public partial class Currency
     {
@@ -19,14 +19,14 @@ namespace AzoftCurrencies.DAL
         public int Id { get; set; }
 
         /// <summary>
-        /// Код валюты по стандарту ISO 4217.
+        /// пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ISO 4217.
         /// </summary>
         [Required]
         [StringLength(3)]
         public string CodeIso4217 { get; set; }
 
         /// <summary>
-        /// Код валюты в системе веб-сервисов ЦБ.
+        /// пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ.
         /// </summary>
         [JsonIgnore]
         [Required]
@@ -34,13 +34,13 @@ namespace AzoftCurrencies.DAL
         public string CodeCbr { get; set; }
 
         /// <summary>
-        /// Название валюты на английском языке.
+        /// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ.
         /// </summary>
         [Required]
         public string NameEn { get; set; }
 
         /// <summary>
-        /// Название валюты на русском языке.
+        /// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ.
         /// </summary>
         [Required]
         public string NameRu { get; set; }

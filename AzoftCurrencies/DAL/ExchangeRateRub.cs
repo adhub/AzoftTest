@@ -5,7 +5,7 @@ namespace AzoftCurrencies.DAL
     using System.ComponentModel.DataAnnotations.Schema;
 
     /// <summary>
-    /// Курс валюты на дату.
+    /// пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ.
     /// </summary>
     [Table("ExchangeRatesRub")]
     public partial class ExchangeRateRub
@@ -13,18 +13,18 @@ namespace AzoftCurrencies.DAL
         public int Id { get; set; }
 
         /// <summary>
-        /// ИД валюты.
+        /// пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
         /// </summary>
         public int CurrencyId { get; set; }
 
         /// <summary>
-        /// Дата курса.
+        /// пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ.
         /// </summary>
         [Column(TypeName = "date")]
         public DateTime Date { get; set; }
 
         /// <summary>
-        /// Значение курса.
+        /// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ.
         /// </summary>
         [Column(TypeName = "money")]
         public decimal? Value { get; set; }

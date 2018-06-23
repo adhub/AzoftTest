@@ -4,7 +4,7 @@ namespace AzoftCurrencies.DAL
     using System.ComponentModel.DataAnnotations.Schema;
 
     /// <summary>
-    /// Сущность таблицы связи пользователя и валюты.
+    /// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
     /// </summary>
     [Table("CurrenciesUsers")]
     public partial class CurrencyUser
